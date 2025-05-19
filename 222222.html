@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title>Duygu Analiz Uygulaması</title>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  #message, #question, #buttons {
+    margin-top: 20px;
+  }
+  button {
+    margin: 10px 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+  #yesBtn {
+    background-color: #25D366; /* WhatsApp yeşili */
+    color: white;
+  }
+  #noBtn {
+    background-color: #888;
+    color: white;
+  }
+  #spotifyPlayer {
+    margin-top: 20px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<button id="duyguBtn">Duygu'ya Dokun</button>
+
+<div id="message"></div>
+
+<div id="question" style="display:none;">
+  Ben bir malım. Birlikte mal olalım mı?
+</div>
+
+<div id="buttons" style="display:none;">
+  <button id="yesBtn">Evet</button>
+  <button id="noBtn">Hayır</button>
+</div>
+
+<div id="spotifyPlayer">
+  <iframe src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+</div>
+
+<script>
+  const duyguBtn = document.getElementById('duyguBtn');
+  const messageDiv = document.getElementById('message');
+  const questionDiv = document.getElementById('question');
+  const buttonsDiv = document.getElementById('buttons');
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const spotifyPlayer = document.getElementById('spotifyPlayer');
+
+  const text = `"feelings": { "towardsYou": "strong_and_confused" }`;
+  let index = 0;
+
+  duyguBtn.addEventListener('click', () => {
+    duyguBtn.style.display = 'none';
+    messageDiv.textContent = '';
+    index = 0;
+    typeWriter();
+  });
+
+  function typeWriter() {
+    if (index < text.length) {
+      messageDiv.textContent += text.charAt(index);
+      index++;
+      setTimeout(typeWriter, 100);
+    } else {
+      questionDiv.style.display = 'block';
+      buttonsDiv.style.display = 'block';
+    }
+  }
+
+  yesBtn.addEventListener('click', () => {
+    buttonsDiv.style.display = 'none';
+    questionDiv.style.display = 'none';
+    const phoneNumber = '905059700095'; // kendi numaranı buraya yaz
+    const message = encodeURIComponent('Evet seçeneğine tıkladı!');
+    const waUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    const opened = window.open(waUrl, '_blank');
+    if (!opened) {
+      alert('Pop-up engelleyiciniz WhatsApp sayfasını açmayı engelliyor olabilir. Lütfen izin verin.');
+    }
+  });
+
+  noBtn.addEventListener('click', () => {
+    buttonsDiv.style.display = 'none';
+    questionDiv.style.display = 'none';
+    spotifyPlayer.style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
